@@ -4,10 +4,11 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-
+import corsOptions from './config/corsOptions.js';
 import credentials from './middleware/credentials.js'
 import postRoutes from './routes/posts.js';
 import userRoutes from './routes/user.js';
+
 import authRoutes from './routes/auth.js';
 import refreshRoutes from './routes/refresh.js';
 import logoutRoutes from './routes/logout.js';
@@ -20,16 +21,19 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 app.use(credentials);
 
 app.use(cors({ origin: true, credentials: true, }));
-
+// Cross Origin Resource Sharing
+//app.use(cors(corsOptions));
 app.use(cookieParser());
 
-app.use('/posts', postRoutes);
 app.use('/user', userRoutes);
-app.use('/auth', authRoutes);
-app.use('/refresh', refreshRoutes);
-app.use('/logout', logoutRoutes);
 
-app.use('/postImage', express.static('uploads'))
+
+
+// app.use('/posts', postRoutes);
+// app.use('/auth', authRoutes);
+// app.use('/refresh', refreshRoutes);
+// app.use('/logout', logoutRoutes);
+
 const CONNECTION_URL = process.env.CONNECTION_URL;
 
 const PORT = process.env.PORT || 5000;

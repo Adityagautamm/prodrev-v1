@@ -6,8 +6,9 @@ import userModel from '../models/userModel.js'
 
 
 export const signin = async (req, res) => {
-    const { email, password } = req.body.data;
 
+    const { email, password } = req.body;
+    console.log('at user controller signin method' + JSON.stringify(req.body));
     try {
         const existingUser = await userModel.findOne({ email });
 
@@ -41,7 +42,8 @@ export const signin = async (req, res) => {
 }
 
 export const signup = async (req, res) => {
-    const { firstName, lastName, email, password, confirmPassword, } = req.body.data;
+
+    const { firstName, lastName, email, password, confirmPassword, } = req.body;
     try {
         const existingUser = await userModel.findOne({ email });
 
@@ -54,11 +56,14 @@ export const signup = async (req, res) => {
 
         const refreshToken = jwt.sign({ name: firstName + "" + lastName, email: email, time: Date.now() }, 'test_refreshToken',)
 
+        // Saving refreshToken with current user
         const result = await userModel.create({ email, password: hashedPassword, name: `${firstName} ${lastName}`, refreshToken: refreshToken });
 
         const token = jwt.sign({ email: result.email, id: result._id }, 'test', { expiresIn: "920s" });
-        console.log('real token------' + token);
-        res.status(200).json({ result, token, refreshToken, message: 'Registered successfully' });
+
+        res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
+
+        res.status(200).json({ name: result.name, token, message: 'Registered successfully' });
     } catch (error) {
         res.status(500).json({ message: "Something went wronggggggggggggg" + error });
         console.error(error.response.data);

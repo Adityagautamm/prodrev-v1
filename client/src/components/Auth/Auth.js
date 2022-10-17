@@ -31,7 +31,7 @@ const SignUp = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        console.log('at handle submit auth component' + JSON.stringify(form))
         if (isSignup) {
             dispatch(signup(form, history));
         } else {
