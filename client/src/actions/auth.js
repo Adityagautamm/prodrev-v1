@@ -16,10 +16,9 @@ export const signin = (formData, router) => async (dispatch) => {
 export const signup = (formData, router) => async (dispatch) => {
     try {
         const { data } = await api.signUp(formData,
-            {
-                headers: { 'Content-Type': 'application/json' },
-                Credential: 'include', withCredentials: true
-            })
+
+
+        )
         console.log('at the actions auth sign up' + JSON.stringify(data))
         dispatch({ type: AUTH, data });
 

@@ -4,6 +4,13 @@ import jwt from "jsonwebtoken";
 
 import userModel from '../models/userModel.js'
 
+const options = {
+    maxAge: process.env.AUTH_SECRET_TOKEN_LIFE * 1000, // AUTH_SECRET_TOKEN_LIFE is in seconds, convert seconds to ms
+    httpOnly: true,
+    path: '/',
+    secure: (process.env.NODE_LOCAL_ENV && process.env.NODE_LOCAL_ENV === 'local') ? false : true, // NOTE: while development on local, we need to pass secure:false and for any other env, it should be true
+    domain: (process.env.NODE_LOCAL_ENV && process.env.NODE_LOCAL_ENV === 'local') ? 'localhost' : (process.env.AUTH_COOKIE_DOMAIN), // domain name should be same, we can also use sub domain which is set in config
+};
 
 export const signin = async (req, res) => {
 
@@ -61,6 +68,8 @@ export const signup = async (req, res) => {
 
         const token = jwt.sign({ email: result.email, id: result._id }, 'test', { expiresIn: "920s" });
 
+
+        //        res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
         res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
 
         res.status(200).json({ name: result.name, token, message: 'Registered successfully' });

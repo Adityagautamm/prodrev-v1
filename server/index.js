@@ -20,9 +20,8 @@ app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 app.use(credentials);
 
-app.use(cors({ origin: true, credentials: true, }));
 // Cross Origin Resource Sharing
-//app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 app.use('/user', userRoutes);
