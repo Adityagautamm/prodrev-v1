@@ -14,12 +14,11 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-google-login": "^5.2.2",
-    "react-redux": "^8.0.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1",
-    "web-vitals": "^2.1.4"
+    "react-redux": "^7.2.6",
+    "web-vitals": "^2.1.4",
+    "@reduxjs/toolkit": "^1.8.0"
   },
   "scripts": {
     "start": "set HTTPS=true&&set SSL_CRT_FILE=localhost.crt&&set SSL_KEY_FILE=localhost.key&&react-scripts start",

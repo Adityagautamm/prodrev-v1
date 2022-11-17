@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { signin, signup } from '../../actions/auth'
+//import { signin, signup } from '../../actions/auth'
 
+
+import { useSelector, useDispatch } from "react-redux";
+import { getToken, getAuthStatus, getAuthError, signup } from "./authSlice";
+import { useEffect } from "react";
 import Icon from './icon';
 
 import useStyles from './styles';
@@ -20,6 +23,19 @@ const SignUp = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    const token = useSelector(getToken);
+    const authStatus = useSelector(getAuthStatus);
+    const error = useSelector(getAuthError);
+
+    // useEffect(() => {
+    //     if (postStatus === 'idle') {
+    //         dispatch(fetchPosts())
+    //     }
+    // }, [postStatus, dispatch])
+
+    //use below code to make suree all the data is present before one can send the post
+    //    const canSave = [title, content, userId].every(Boolean) && addRequestStatus === 'idle';
+
     const [showPassword, setShowPassword] = useState(false);
     const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -33,9 +49,12 @@ const SignUp = () => {
         e.preventDefault();
         console.log('at handle submit auth component' + JSON.stringify(form))
         if (isSignup) {
-            dispatch(signup(form, history));
+            // dispatch(signup(form, history));
+            dispatch(signup({ form, history })).unwrap()
+
         } else {
-            dispatch(signin(form, history));
+            console.log('at sign in of Auth component')
+            // dispatch(signin(form, history));
         }
     };
 

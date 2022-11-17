@@ -19,7 +19,7 @@ export const signup = (formData, router) => async (dispatch) => {
 
 
         )
-        console.log('at the actions auth sign up' + JSON.stringify(data))
+        console.log('at the actions auth sign up')
         dispatch({ type: AUTH, data });
 
         router.push('/');

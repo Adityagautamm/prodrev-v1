@@ -1,14 +1,57 @@
 import axios from 'axios';
+import { useSelector, useDispatch } from "react-redux";
+import { getToken } from "./../components/Auth/authSlice";
 
-const API = axios.create({ baseURL: 'http://localhost:5000', withCredentials: true, credentials: 'include' });
+
+export const API = axios.create({ baseURL: 'http://localhost:5000', withCredentials: true, credentials: 'include' });
+
+
 
 API.interceptors.request.use((req) => {
-    if (localStorage.getItem('profile')) {
-        req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+    const token = useSelector(getToken);
+    if (token) {
+        console.log('request interceptor:' + `Bearer ${token}`);
+        req.headers.Authorization = `Bearer ${token}`;
     }
-
     return req;
 });
+
+
+API.interceptors.response.use(
+    response => response,
+    async (error) => {
+        const prevRequest = error?.config;
+        if (error?.response?.status === 403 && !prevRequest?.sent) {
+            prevRequest.sent = true;
+            // add method below to call API to get new access token and save it in state- may be use useRfresh hook to do that
+            const newAccessToken = await refresh();
+            prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            //   return axiosPrivate(prevRequest);
+        }
+        // return Promise.reject(error);
+    }
+);
+
+
+const refresh = async () => {
+    const response = await API.get('/refresh', {
+        withCredentials: true
+    });
+    //saving the new access token in state
+    // setAuth(prev => {
+    //     console.log(JSON.stringify(prev));
+    //     console.log(response.data.accessToken);
+    //     return { ...prev, accessToken: response.data.accessToken }
+    // });
+    // return response.data.accessToken;
+}
+// API.interceptors.request.use((req) => {
+//     if (localStorage.getItem('profile')) {
+//         req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+//     }
+
+//     return req;
+// });
 
 
 // export const fetchPost = (id) => API.get(`/posts/${id}`);
