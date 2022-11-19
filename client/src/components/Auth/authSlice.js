@@ -1,13 +1,14 @@
 
 import * as api from '../../api/index.js';
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 
 const POSTS_URL = 'http://localhost:5000';
 
 const initialState = {
-    token: '',
+    token: 'token',
     status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
     error: null
 }
@@ -39,6 +40,7 @@ export const authSlice = createSlice({
                 console.log('inside builder');
                 // state.posts.push(action.payload)
                 state.token = JSON.stringify(action.payload.token);
+                console.log('token at Auth component: ' + state.token)
             })
     }
 });
@@ -46,7 +48,6 @@ export const authSlice = createSlice({
 export const getToken = (state) => state.auth.token;
 export const getAuthStatus = (state) => state.auth.status;
 export const getAuthError = (state) => state.auth.error;
-
 export const { increment, decrement } = authSlice.actions;
 
 export default authSlice.reducer;

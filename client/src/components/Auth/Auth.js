@@ -23,10 +23,10 @@ const SignUp = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const token = useSelector(getToken);
+
     const authStatus = useSelector(getAuthStatus);
     const error = useSelector(getAuthError);
-
+    const token = useSelector(getToken);
     // useEffect(() => {
     //     if (postStatus === 'idle') {
     //         dispatch(fetchPosts())

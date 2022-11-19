@@ -1,19 +1,25 @@
 import axios from 'axios';
-import { useSelector, useDispatch } from "react-redux";
-import { getToken } from "./../components/Auth/authSlice";
 
+// to access store in a non component
+let store
+
+export const injectStore = _store => {
+    store = _store
+}
 
 export const API = axios.create({ baseURL: 'http://localhost:5000', withCredentials: true, credentials: 'include' });
 
 
 
 API.interceptors.request.use((req) => {
-    const token = useSelector(getToken);
-    if (token) {
-        console.log('request interceptor:' + `Bearer ${token}`);
-        req.headers.Authorization = `Bearer ${token}`;
+    try {
+        console.log('token at interceptor:' + store.getState().auth.token)
+        req.headers.Authorization = `Bearer ${store.getState().auth.token}`;
+
+        return req;
+    } catch (error) {
+        console.log('request interceptor error')
     }
-    return req;
 });
 
 
