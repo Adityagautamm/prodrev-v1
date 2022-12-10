@@ -46,15 +46,28 @@ const SignUp = () => {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('at handle submit auth component' + JSON.stringify(form))
-        if (isSignup) {
-            // dispatch(signup(form, history));
-            dispatch(signup({ form, history })).unwrap()
+        try {
 
-        } else {
-            console.log('at sign in of Auth component')
-            // dispatch(signin(form, history));
+            e.preventDefault();
+            console.log('at handle submit auth component' + JSON.stringify(form))
+            if (isSignup) {
+                // dispatch(signup(form, history));
+                dispatch(signup({ form, history })).unwrap()
+
+                // setting up from value back to emty
+                setForm(initialState);
+
+                //navigating to homepage
+                // history.push('/')
+
+
+            } else {
+                console.log('at sign in of Auth component')
+                // dispatch(signin(form, history));
+            }
+
+        } catch (error) {
+            console.log('auth handle submit error: ' + error)
         }
     };
 

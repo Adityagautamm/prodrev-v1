@@ -49,6 +49,7 @@ export const signin = async (req, res) => {
 }
 
 export const signup = async (req, res) => {
+    console.log('signup controller');
 
     const { firstName, lastName, email, password, confirmPassword, } = req.body;
     try {
@@ -66,7 +67,7 @@ export const signup = async (req, res) => {
         // Saving refreshToken with current user
         const result = await userModel.create({ email, password: hashedPassword, name: `${firstName} ${lastName}`, refreshToken: refreshToken });
 
-        const token = jwt.sign({ email: result.email, id: result._id }, 'test', { expiresIn: "920s" });
+        const token = jwt.sign({ email: result.email, id: result._id }, 'test', { expiresIn: "10s" });
 
 
         //        res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });

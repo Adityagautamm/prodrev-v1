@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 const secret = "test";
 
-const auth = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     console.log("Middleware");
     try {
         const token = req.headers.authorization.split(" ")[1];
@@ -9,17 +9,14 @@ const auth = async (req, res, next) => {
 
         let decodedData;
 
+
         if (token && isCustomAuth) {
-            jwt.verify(token, secret, function (err, decoded) {
-                if (err) return res.sendStatus(403); //invalid token
-                //  req.userId = decodedData?.name;
-            });
+            console.log('IF block')
+            decodedData = jwt.verify(token, secret);
 
-            // decodedData = jwt.verify(token, secret);
-
-            //req.userId = decodedData?.id;
+            req.userId = decodedData?.id;
         } else {
-            console.log("DECODE");
+            console.log('else block')
             decodedData = jwt.decode(token);
 
             req.userId = decodedData?.sub;
@@ -27,8 +24,9 @@ const auth = async (req, res, next) => {
 
         next();
     } catch (error) {
-        console.log(error);
+        console.log('error:' + error);
     }
 };
 
-export default auth;
+
+export default authMiddleware;

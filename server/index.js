@@ -25,12 +25,12 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 app.use('/user', userRoutes);
-
+app.use('/refresh', refreshRoutes);
 
 
 // app.use('/posts', postRoutes);
 // app.use('/auth', authRoutes);
-// app.use('/refresh', refreshRoutes);
+
 // app.use('/logout', logoutRoutes);
 
 const CONNECTION_URL = process.env.CONNECTION_URL;

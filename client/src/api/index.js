@@ -24,17 +24,25 @@ API.interceptors.request.use((req) => {
 
 
 API.interceptors.response.use(
+
     response => response,
     async (error) => {
-        const prevRequest = error?.config;
-        if (error?.response?.status === 403 && !prevRequest?.sent) {
-            prevRequest.sent = true;
-            // add method below to call API to get new access token and save it in state- may be use useRfresh hook to do that
-            const newAccessToken = await refresh();
-            prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-            //   return axiosPrivate(prevRequest);
+        try {
+            console.log('at response interceptor')
+            const prevRequest = error?.config;
+            if (error?.response?.status === 403 && !prevRequest?.sent) {
+                prevRequest.sent = true;
+                // add method below to call API to get new access token and save it in state- may be use useRfresh hook to do that
+                const newAccessToken = await refresh();
+                store.replaceAccessToken(newAccessToken);
+                prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                //   return axiosPrivate(prevRequest);
+            }
+            // return Promise.reject(error);
+
+        } catch (error) {
+            console.log('response interceptor error:' + error);
         }
-        // return Promise.reject(error);
     }
 );
 
@@ -49,7 +57,7 @@ const refresh = async () => {
     //     console.log(response.data.accessToken);
     //     return { ...prev, accessToken: response.data.accessToken }
     // });
-    // return response.data.accessToken;
+    return response.data.accessToken;
 }
 // API.interceptors.request.use((req) => {
 //     if (localStorage.getItem('profile')) {
