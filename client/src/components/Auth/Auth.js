@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 
 import { useSelector, useDispatch } from "react-redux";
-import { getToken, getAuthStatus, getAuthError, signup } from "./authSlice";
+import { getToken, getAuthStatus, getAuthError, signup, signin } from "./authSlice";
 import { useEffect } from "react";
 import Icon from './icon';
 
@@ -51,19 +51,30 @@ const SignUp = () => {
             e.preventDefault();
             console.log('at handle submit auth component' + JSON.stringify(form))
             if (isSignup) {
-                // dispatch(signup(form, history));
+
                 dispatch(signup({ form, history })).unwrap()
 
                 // setting up from value back to emty
                 setForm(initialState);
 
-                //navigating to homepage
-                // history.push('/')
 
+                //navigating to homepage
+                history.push('/');
 
             } else {
                 console.log('at sign in of Auth component')
-                // dispatch(signin(form, history));
+
+                //passing the token
+
+
+                dispatch(signin({ form })).unwrap();
+
+
+                // setting up from value back to emty
+                setForm(initialState);
+
+                //navigating to homepage
+                history.push('/');
             }
 
         } catch (error) {

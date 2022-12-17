@@ -1,20 +1,28 @@
 import axios from 'axios';
 
 // to access store in a non component
-let store
+let token = 'wakeupToken';
+let store;
 
 export const injectStore = _store => {
     store = _store
 }
 
+
+export const injectToken = (_token = 'token') => {
+    token = _token;
+}
 export const API = axios.create({ baseURL: 'http://localhost:5000', withCredentials: true, credentials: 'include' });
 
 
 
-API.interceptors.request.use((req) => {
+API.interceptors.request.use(async (req) => {
     try {
-        console.log('token at interceptor:' + store.getState().auth.token)
-        req.headers.Authorization = `Bearer ${store.getState().auth.token}`;
+        // let state = getState().auth.token;
+        // console.log('token at interceptor:' + store.getState().auth.token)
+        console.log('token at interceptor:' + token)
+
+        req.headers.Authorization = `Bearer ${token}`;
 
         return req;
     } catch (error) {
